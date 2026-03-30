@@ -1,0 +1,26 @@
+// Schema Prisma pour ReduceLink
+// Base de données SQLite pour stocker les liens raccourcis
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Modèle pour les liens raccourcis
+model Link {
+  id          Int      @id @default(autoincrement())
+  originalUrl String   // URL originale complète
+  shortCode   String   @unique // Alias/code court unique
+  clickCount  Int      @default(0) // Compteur de clics
+  createdAt   DateTime @default(now()) // Date de création
+  title       String?  // Titre de la page (optionnel)
+  favicon     String?  // URL du favicon (optionnel)
+
+  @@index([shortCode])
+  @@index([createdAt])
+  @@index([clickCount])
+}

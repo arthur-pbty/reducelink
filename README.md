@@ -1,36 +1,125 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ReduceLink 🔗
 
-## Getting Started
+Un service de raccourcissement de liens gratuit, simple et transparent.
 
-First, run the development server:
+- Site officiel : https://reducelink.arthurp.fr
+- Dépôt GitHub : https://github.com/arthur-pbty/reducelink
+
+![Next.js](https://img.shields.io/badge/Next.js-16-black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38bdf8)
+![SQLite](https://img.shields.io/badge/SQLite-Prisma-green)
+
+## ✨ Fonctionnalités
+
+- **Raccourcissement de liens** : Transformez vos URLs longues en liens courts
+- **Alias personnalisé** : Choisissez votre propre alias ou laissez-en générer un automatiquement
+- **QR Code** : Chaque lien génère un QR Code téléchargeable
+- **Statistiques** : Suivez le nombre de clics en temps réel
+- **100% gratuit** : Aucune inscription, aucune limitation
+- **Transparence** : Tous les liens sont publics
+
+## 🚀 Démarrage rapide
+
+### Prérequis
+
+- Node.js 18+
+- npm ou yarn
+
+### Installation
 
 ```bash
+# Cloner le projet
+git clone https://github.com/arthur-pbty/reducelink.git
+cd reducelink
+
+# Installer les dépendances
+npm install
+
+# Configurer l'environnement
+cp .env.example .env
+
+# Initialiser la base de données
+npx prisma migrate dev
+
+# Lancer le serveur de développement
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Ouvrez [http://localhost:3000](http://localhost:3000) dans votre navigateur.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📁 Structure du projet
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+reducelink/
+├── prisma/
+│   ├── schema.prisma      # Schéma de la base de données
+│   └── migrations/        # Migrations SQL
+├── src/
+│   ├── app/               # Pages Next.js (App Router)
+│   │   ├── page.tsx       # Page d'accueil
+│   │   ├── liens/         # Liste des liens
+│   │   ├── stats/         # Statistiques
+│   │   ├── a-propos/      # À propos
+│   │   ├── conditions/    # CGU
+│   │   └── [shortCode]/   # Redirection dynamique
+│   ├── components/        # Composants React
+│   └── lib/               # Utilitaires et actions
+├── public/                # Assets statiques
+└── package.json
+```
 
-## Learn More
+## 🛠️ Technologies
 
-To learn more about Next.js, take a look at the following resources:
+- **Framework** : Next.js 16 avec App Router
+- **Langage** : TypeScript
+- **Base de données** : SQLite avec Prisma
+- **Styles** : Tailwind CSS
+- **QR Code** : qrcode.react
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📖 Pages
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Route | Description |
+|-------|-------------|
+| / | Page d'accueil avec formulaire |
+| /liens | Liste de tous les liens |
+| /stats | Statistiques globales |
+| /a-propos | Informations sur le service |
+| /conditions | Conditions d'utilisation |
+| /{shortCode} | Redirection vers l'URL originale |
 
-## Deploy on Vercel
+## 🔧 Configuration
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Variables d'environnement (.env) :
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```env
+# Base de données SQLite
+DATABASE_URL="file:./dev.db"
+
+# URL de base du site
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
+```
+
+## 📦 Scripts
+
+```bash
+npm run dev      # Serveur de développement
+npm run build    # Build de production
+npm run start    # Serveur de production
+npm run lint     # Linting ESLint
+```
+
+## 🗃️ Base de données
+
+Commandes Prisma utiles :
+
+```bash
+npx prisma migrate dev      # Créer une migration
+npx prisma migrate reset    # Réinitialiser la DB
+npx prisma studio           # Interface visuelle
+npx prisma generate         # Générer le client
+```
+
+---
+
+Fait avec ❤️ pour simplifier vos URLs.
