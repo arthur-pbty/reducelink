@@ -1,53 +1,53 @@
 # =========================
 #        BUILD STAGE
 # =========================
-FROM node:20-alpine AS builder
+FROM node:20-bullseye AS builder
 
 WORKDIR /app
 
-# dépendances
 COPY package*.json ./
 RUN npm ci
 
-# code source
 COPY . .
 
-# Prisma generate (OBLIGATOIRE avant build Next)
+# Prisma generate
 RUN npx prisma generate
 
-# build Next.js (standalone)
+# Build Next.js
 RUN npm run build
 
 
 # =========================
 #        RUN STAGE
 # =========================
-FROM node:20-alpine AS runner
+FROM node:20-bullseye AS runner
 
 WORKDIR /app
 
 ENV NODE_ENV=production
 ENV PORT=3000
 
-# Installer uniquement les deps prod (nécessaire pour Prisma runtime)
+# OpenSSL + Prisma runtime dependencies (IMPORTANT)
+RUN apt-get update && apt-get install -y \
+    openssl \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY package*.json ./
 RUN npm ci --omit=dev
 
-# Next standalone output
+# Next standalone
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
 
-# Prisma (schema + migrations + seed si existant)
+# Prisma
 COPY --from=builder /app/prisma ./prisma
-
-# Prisma client généré
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
-# SQLite data folder (IMPORTANT)
+# SQLite folder
 RUN mkdir -p /app/data
-
 VOLUME ["/app/data"]
 
 EXPOSE 3000
